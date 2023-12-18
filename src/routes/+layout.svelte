@@ -1,7 +1,7 @@
 <script>
+	import Text from '$lib/components/Text.svelte';
 	import '@fontsource/space-grotesk';
 	import '@fontsource/space-grotesk/700.css';
-	import { Text } from 'portal';
 	import '../app.css';
 </script>
 
