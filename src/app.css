@@ -15,12 +15,19 @@ body {
 	font-family: 'Highway Gothic';
 }
 
-h1 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 	font-family: 'Highway Gothic Condensed';
-	@apply font-bold text-9xl;
+}
+
+h1 {
+	@apply text-4xl font-bold md:text-7xl 2xl:text-9xl;
 }
 
 h2 {
-	font-family: 'Highway Gothic Condensed';
-	@apply font-bold text-7xl;
+	@apply text-5xl font-bold md:text-7xl;
 }

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { Button, Photo, PhotoContainer, Text } from '$lib/index.js';
 	import t from '$lib/stores/t.js';
 	import { onMount } from 'svelte';
@@ -9,6 +10,8 @@
 	t.set(data.texts);
 
 	let line: SVGPathElement;
+	let scrollText: HTMLSpanElement;
+	let width: number;
 
 	onMount(() => {
 		const length = line.getTotalLength();
@@ -32,35 +35,54 @@
 	});
 </script>
 
+<svelte:window bind:innerWidth={width} />
+
 <div class="absolute z-50 flex justify-center w-full pt-12">
 	<div class="container flex items-center justify-between">
-		<Photo class="h-24" src="/burger66-transparent.svg" alt="Burger Logo" />
+		<Photo class="h-16" src="/burger66-transparent.svg" alt="Burger Logo" />
 		<Button
-			id="home.hero.cta1"
-			class="p-6 py-4 font-bold text-white duration-200 border-2 bg-secondary hover:bg-transparent hover:text-white hover:border-white border-secondary"
+			id="header.cta"
+			class="p-6 py-4 font-bold text-white duration-200 border-2 bg-secondary hover:bg-primary hover:border-primary border-secondary"
 		/>
 	</div>
 </div>
 
 <PhotoContainer
-	class="flex flex-col items-center justify-center h-[70vh] gap-4 text-white text-center bg-black/50"
+	class="flex flex-col items-center justify-center px-4 h-[80vh] md:h-[70vh] gap-4 text-white text-center bg-black/50"
 	src="/route66.jpg"
 >
 	<h1>
 		<Text id="home.hero.heading" />
 	</h1>
 
-	<p class="max-w-2xl text-2xl">
+	<p class="max-w-2xl text-lg md:text-2xl">
 		<Text id="home.hero.text" />
 	</p>
 </PhotoContainer>
 
-<div class="relative grid grid-cols-2">
+<div class="py-4 overflow-hidden text-3xl text-white bg-black">
+	<div class="flex gap-2" id="scroll" style="--scroll: -{scrollText?.clientWidth + 8}px">
+		<span class="block whitespace-nowrap" bind:this={scrollText}>
+			<Text id="home.scroll" />
+		</span>
+
+		{#key width}
+			{#if browser && scrollText}
+				{#each { length: Math.ceil(width / scrollText.clientWidth) } as _}
+					<span class="block whitespace-nowrap">
+						<Text id="home.scroll" />
+					</span>
+				{/each}
+			{/if}
+		{/key}
+	</div>
+</div>
+
+<div class="relative grid grid-cols-1 md:grid-cols-2">
 	<svg
-		class="absolute w-1/2 h-full transform -translate-x-1/2 -translate-y-1/2 -z-10 stroke-black left-1/2 top-1/2"
+		class="absolute hidden h-full transform -translate-x-1/2 -translate-y-1/2 -z-10 stroke-black left-1/2 top-1/2"
 		viewBox="0 0 762 1004"
 		fill="none"
-		preserveAspectRatio="none"
 		xmlns="http://www.w3.org/2000/svg"
 	>
 		<path
@@ -70,12 +92,17 @@
 		/>
 	</svg>
 
-	<div class="flex justify-center px-16 py-32">
+	<div class="md:hidden">
+		<PhotoContainer src="/la.jpg" class="flex items-end justify-center h-full">
+			<Photo src="/burger.png" alt="Burger" class="z-20 mt-24 -mb-8 md:-mb-12 h-44 md:h-80" />
+		</PhotoContainer>
+	</div>
+	<div class="container flex justify-center py-16 md:py-32 md:px-16">
 		<div class="flex flex-col gap-4">
 			<h2>
 				<Text id="home.section1.heading" />
 			</h2>
-			<p class="w-[36rem]">
+			<p class="max-w-lg">
 				<Text id="home.section1.text" />
 			</p>
 			{#if $t['home.section1.cta']}
@@ -86,19 +113,21 @@
 			{/if}
 		</div>
 	</div>
-	<PhotoContainer src="/la.jpg" class="relative flex items-end justify-center h-full">
-		<Photo src="/burger.png" alt="Burger" class="z-20 -mb-12 h-80" />
-	</PhotoContainer>
+	<div class="hidden md:block">
+		<PhotoContainer fullHeight src="/la.jpg" class="flex items-end justify-center h-full">
+			<Photo src="/burger.png" alt="Burger" class="z-20 mt-24 -mb-8 md:-mb-12 h-44 md:h-80" />
+		</PhotoContainer>
+	</div>
 
 	<PhotoContainer src="/miami.jpg" class="flex items-end justify-center h-full">
-		<Photo src="/burger.png" alt="Burger" class="z-20 -mb-12 h-80" />
+		<Photo src="/burger.png" alt="Burger" class="z-20 mt-24 -mb-8 md:-mb-12 h-44 md:h-80" />
 	</PhotoContainer>
-	<div class="flex justify-center px-16 py-32">
+	<div class="container flex justify-center py-16 md:py-32 md:px-16">
 		<div class="flex flex-col gap-4">
 			<h2>
 				<Text id="home.section2.heading" />
 			</h2>
-			<p class="w-[36rem]">
+			<p class="max-w-lg">
 				<Text id="home.section2.text" />
 			</p>
 			{#if $t['home.section2.cta']}
@@ -110,12 +139,17 @@
 		</div>
 	</div>
 
-	<div class="flex justify-center px-16 py-32">
+	<div class="md:hidden">
+		<PhotoContainer src="/chicago.jpg" class="flex items-end justify-center h-full">
+			<Photo src="/burger.png" alt="Burger" class="z-20 mt-24 -mb-8 md:-mb-12 h-44 md:h-80" />
+		</PhotoContainer>
+	</div>
+	<div class="container flex justify-center py-16 md:py-32 md:px-16">
 		<div class="flex flex-col gap-4">
 			<h2>
 				<Text id="home.section3.heading" />
 			</h2>
-			<p class="w-[36rem]">
+			<p class="max-w-lg">
 				<Text id="home.section3.text" />
 			</p>
 			{#if $t['home.section3.cta']}
@@ -126,9 +160,11 @@
 			{/if}
 		</div>
 	</div>
-	<PhotoContainer src="/chicago.jpg" class="flex items-end justify-center h-full">
-		<Photo src="/burger.png" alt="Burger" class="z-20 -mb-12 h-80" />
-	</PhotoContainer>
+	<div class="hidden md:block">
+		<PhotoContainer fullHeight src="/chicago.jpg" class="flex items-end justify-center h-full">
+			<Photo src="/burger.png" alt="Burger" class="z-20 mt-24 -mb-8 md:-mb-12 h-44 md:h-80" />
+		</PhotoContainer>
+	</div>
 </div>
 
 <iframe
@@ -142,3 +178,18 @@
 	loading="lazy"
 	referrerpolicy="no-referrer-when-downgrade"
 />
+
+<style>
+	#scroll {
+		animation: scroll 3s linear infinite;
+	}
+
+	@keyframes scroll {
+		0% {
+			transform: translate(0, 0);
+		}
+		100% {
+			transform: translate(var(--scroll), 0);
+		}
+	}
+</style>
