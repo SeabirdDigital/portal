@@ -8,7 +8,8 @@ export default {
 				padding: '1rem'
 			},
 			colors: {
-				primary: 'var(--primary)'
+				primary: 'var(--primary)',
+				secondary: 'var(--secondary)'
 			}
 		}
 	},

@@ -1,46 +1,77 @@
 <script lang="ts">
 	import { Button, Photo, PhotoContainer, Text } from '$lib/index.js';
 	import t from '$lib/stores/t.js';
+	import { onMount } from 'svelte';
+	import { draw } from 'svelte/transition';
 
 	export let data;
 
 	t.set(data.texts);
+
+	let line: SVGPathElement;
+
+	onMount(() => {
+		const length = line.getTotalLength();
+		line.style.strokeDasharray = length + '' + length;
+		line.style.strokeDashoffset = length.toString();
+
+		window.addEventListener('scroll', () => {
+			const scrollPercentage =
+				(document.documentElement.scrollTop + document.body.scrollTop) /
+				(document.documentElement.scrollHeight - document.documentElement.clientHeight);
+
+			const drawLength = length * scrollPercentage;
+			line.style.strokeDashoffset = (length - drawLength).toString();
+
+			if (scrollPercentage >= 0.99) {
+				line.style.strokeDasharray = 'none';
+			} else {
+				line.style.strokeDasharray = length + ' ' + length;
+			}
+		});
+	});
 </script>
 
 <div class="absolute z-50 flex justify-center w-full pt-12">
 	<div class="container flex items-center justify-between">
-		<Photo class="h-24" src="/logo.png" alt="Burger Logo" />
+		<Photo class="h-24" src="/burger66-transparent.svg" alt="Burger Logo" />
 		<Button
 			id="home.hero.cta1"
-			class="p-6 py-4 font-bold duration-200 border-2 bg-primary hover:bg-transparent hover:text-white hover:border-white border-primary"
+			class="p-6 py-4 font-bold text-white duration-200 border-2 bg-secondary hover:bg-transparent hover:text-white hover:border-white border-secondary"
 		/>
 	</div>
 </div>
 
 <PhotoContainer
-	class="flex flex-col items-center justify-center h-[70vh] gap-6 text-center bg-black/50"
-	src="/burger.jpg"
+	class="flex flex-col items-center justify-center h-[70vh] gap-4 text-white text-center bg-black/50"
+	src="/route66.jpg"
 >
-	<h1 class="text-primary">
-		<!-- svelte-ignore missing-declaration -->
+	<h1>
 		<Text id="home.hero.heading" />
 	</h1>
 
-	<div class="flex gap-4">
-		<Button
-			id="home.hero.cta1"
-			class="p-6 py-4 font-bold duration-200 border-2 bg-primary hover:bg-transparent hover:text-white hover:border-white border-primary"
-		/>
-		<Button
-			id="home.hero.cta2"
-			class="p-6 py-4 font-bold duration-200 border-2 border-primary text-primary hover:bg-white hover:border-white hover:text-black"
-		/>
-	</div>
+	<p class="max-w-2xl text-2xl">
+		<Text id="home.hero.text" />
+	</p>
 </PhotoContainer>
 
-<div class="grid grid-cols-2">
+<div class="relative grid grid-cols-2">
+	<svg
+		class="absolute w-1/2 h-full transform -translate-x-1/2 -translate-y-1/2 -z-10 stroke-black left-1/2 top-1/2"
+		viewBox="0 0 762 1004"
+		fill="none"
+		preserveAspectRatio="none"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<path
+			bind:this={line}
+			d="M185 1C185 1 199.306 34.4199 213.5 52.5C243.779 91.0674 273.649 103.005 320 119C425.959 155.564 488.91 60.5 601 60.5C662 60.5 706.493 85.2197 738 138C784.592 216.05 755.297 322.901 673 361.5C619.659 386.518 562.646 307.509 516 343.5C504.405 352.447 496.58 363.86 497 378.5C497.6 399.384 532.116 402.684 544 385.5C552.219 373.616 553.349 355.666 550.5 341.5C536.334 271.054 437.335 271.357 366 280C260.723 292.756 176.5 348.5 107 421.5C78.7179 451.207 41.402 488.095 27.0001 526.5C6.00005 582.5 -20.2962 646.858 34.0001 702C59.7401 728.141 82.6663 736.926 119 742C193.383 752.388 211.447 650.297 286.5 647.5C337.452 645.601 376.175 648.702 421 673C474.5 702 500.499 737.697 550.5 781C598.212 822.32 621.994 849.182 662 898C694.085 937.152 738 1003 738 1003"
+			stroke-width="1"
+		/>
+	</svg>
+
 	<div class="flex justify-center px-16 py-32">
-		<div class="flex flex-col gap-8">
+		<div class="flex flex-col gap-4">
 			<h2>
 				<Text id="home.section1.heading" />
 			</h2>
@@ -50,16 +81,20 @@
 			{#if $t['home.section1.cta']}
 				<Button
 					id="home.section1.cta"
-					class="p-6 py-4 font-bold duration-200 border-2 bg-primary hover:bg-transparent hover:text-black hover:border-black border-primary"
+					class="p-6 py-4 font-bold text-white duration-200 border-2 bg-secondary hover:bg-transparent hover:text-black hover:border-black border-secondary"
 				/>
 			{/if}
 		</div>
 	</div>
-	<PhotoContainer src="/inside.jpg" />
+	<PhotoContainer src="/la.jpg" class="relative flex items-end justify-center h-full">
+		<Photo src="/burger.png" alt="Burger" class="z-20 -mb-12 h-80" />
+	</PhotoContainer>
 
-	<PhotoContainer src="/hamburger.jpg" />
+	<PhotoContainer src="/miami.jpg" class="flex items-end justify-center h-full">
+		<Photo src="/burger.png" alt="Burger" class="z-20 -mb-12 h-80" />
+	</PhotoContainer>
 	<div class="flex justify-center px-16 py-32">
-		<div class="flex flex-col gap-8">
+		<div class="flex flex-col gap-4">
 			<h2>
 				<Text id="home.section2.heading" />
 			</h2>
@@ -69,14 +104,14 @@
 			{#if $t['home.section2.cta']}
 				<Button
 					id="home.section2.cta"
-					class="p-6 py-4 font-bold duration-200 border-2 bg-primary hover:bg-transparent hover:text-black hover:border-black border-primary"
+					class="p-6 py-4 font-bold text-white duration-200 border-2 bg-secondary hover:bg-transparent hover:text-black hover:border-black border-secondary"
 				/>
 			{/if}
 		</div>
 	</div>
 
 	<div class="flex justify-center px-16 py-32">
-		<div class="flex flex-col gap-8">
+		<div class="flex flex-col gap-4">
 			<h2>
 				<Text id="home.section3.heading" />
 			</h2>
@@ -86,12 +121,14 @@
 			{#if $t['home.section3.cta']}
 				<Button
 					id="home.section3.cta"
-					class="p-6 py-4 font-bold duration-200 border-2 bg-primary hover:bg-transparent hover:text-black hover:border-black border-primary"
+					class="p-6 py-4 font-bold text-white duration-200 border-2 bg-secondary hover:bg-transparent hover:text-black hover:border-black border-secondary"
 				/>
 			{/if}
 		</div>
 	</div>
-	<PhotoContainer src="/outside.jpg" />
+	<PhotoContainer src="/chicago.jpg" class="flex items-end justify-center h-full">
+		<Photo src="/burger.png" alt="Burger" class="z-20 -mb-12 h-80" />
+	</PhotoContainer>
 </div>
 
 <iframe

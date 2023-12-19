@@ -2,14 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+	font-family: 'Highway Gothic';
+	src: url('/fonts/HWYGOTH.tff') format('tff');
+}
+@font-face {
+	font-family: 'Highway Gothic Condensed';
+	src: url('/fonts/HWYGCOND.tff') format('tff');
+}
+
 body {
-	font-family: 'Space Grotesk';
+	font-family: 'Highway Gothic';
 }
 
 h1 {
-	@apply font-bold text-8xl;
+	font-family: 'Highway Gothic Condensed';
+	@apply font-bold text-9xl;
 }
 
 h2 {
-	@apply text-6xl font-bold;
+	font-family: 'Highway Gothic Condensed';
+	@apply font-bold text-7xl;
 }

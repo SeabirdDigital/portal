@@ -5,7 +5,7 @@
 	import '../app.css';
 </script>
 
-<div style="--primary: #ffbb34;">
+<div style="--primary: #2F80ED; --secondary: #FF0000;">
 	<slot />
 
 	<footer class="flex justify-center px-4 py-6 text-center text-white bg-primary">
